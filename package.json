@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc",
+    "start": "node dist/index.js",
+    "dev": "concurrently 'npx tsc --watch' 'nodemon -q dist/index.js'",
     "format": "npx -p prettier@2.8.7 -p pretty-quick pretty-quick"
   },
   "keywords": [],
@@ -17,6 +20,8 @@
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/node": "^18.15.11",
+    "concurrently": "^8.0.1",
+    "nodemon": "^2.0.22",
     "prettier": "^2.8.7",
     "typescript": "^5.0.4"
   }
