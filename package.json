@@ -8,7 +8,8 @@
     "build": "npx tsc",
     "start": "node dist/index.js",
     "dev": "concurrently 'npx tsc --watch' 'nodemon -q dist/index.js'",
-    "format": "npx -p prettier@2.8.7 -p pretty-quick pretty-quick"
+    "format": "npx -p prettier@2.8.7 -p pretty-quick pretty-quick",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
@@ -30,6 +31,7 @@
     "concurrently": "^8.0.1",
     "nodemon": "^2.0.22",
     "prettier": "^2.8.7",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "husky": "^8.0.0"
   }
 }
