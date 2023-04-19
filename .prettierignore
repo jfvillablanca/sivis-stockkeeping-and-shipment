@@ -1,0 +1,13 @@
+# Directories
+node_modules
+.direnv
+
+# Files
+*.json
+*.log
+*.txt
+*.md
+
+# .gitignore files
+!.gitignore
+!.prettierignore
