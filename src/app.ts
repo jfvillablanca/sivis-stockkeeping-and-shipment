@@ -1,4 +1,5 @@
 import express, { Express, NextFunction, Request, Response } from "express";
+import { engine } from "express-handlebars";
 import path from "path";
 import dotenv from "dotenv";
 import createError from "http-errors";
@@ -12,8 +13,17 @@ import { router as indexRouter } from "./routes/index";
 const app: Express = express();
 const port = process.env.PORT;
 
+app.engine(
+    ".hbs",
+    engine({
+        defaultLayout: "index",
+        extname: ".hbs",
+        layoutsDir: path.join(__dirname, "views"),
+        partialsDir: path.join(__dirname, "views/partials"),
+    })
+);
 app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "hbs");
+app.set("view engine", ".hbs");
 
 app.use(logger("dev"));
 app.use(express.json());
