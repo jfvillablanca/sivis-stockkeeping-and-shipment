@@ -10,7 +10,7 @@
     "dev": "concurrently 'npx tsc --watch' 'npm run copy-views' 'nodemon dist/app.js'",
     "format": "npx -p prettier@2.8.7 -p pretty-quick pretty-quick",
     "prepare": "husky install",
-    "copy-views": "cp -r ./src/views ./dist && cp -r ./src/public ./dist"
+    "copy-views": "mkdir -p ./dist/views && cp -r ./src/views ./dist && mkdir -p ./dist/public && cp -r ./src/public ./dist"
   },
   "nodemonConfig": {
     "watch": [
