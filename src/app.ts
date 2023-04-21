@@ -1,4 +1,5 @@
 import express, { Express, NextFunction, Request, Response } from "express";
+import mongoose from "mongoose";
 import { engine } from "express-handlebars";
 import path from "path";
 import dotenv from "dotenv";
@@ -12,6 +13,18 @@ import { router as indexRouter } from "./routes/index";
 
 const app: Express = express();
 const port = process.env.PORT;
+
+// Set up mongoose connection
+mongoose.set("strictQuery", false);
+
+const dev_db_url =
+    "mongodb+srv://admin:arstneio@cluster0.h8ibp9y.mongodb.net/sivis_inventory?retryWrites=true&w=majority";
+const mongoDB = process.env.MONGODB_URI || dev_db_url;
+
+main().catch((err) => console.log(err));
+async function main() {
+    await mongoose.connect(mongoDB);
+}
 
 app.engine(
     ".hbs",
