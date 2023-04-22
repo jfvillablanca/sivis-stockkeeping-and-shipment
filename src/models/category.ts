@@ -1,7 +1,12 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 import mongooseLeanVirtuals from "mongoose-lean-virtuals";
 
 const Schema = mongoose.Schema;
+
+interface CategoryInterface extends Document {
+    name: string;
+    url: string;
+}
 
 const CategorySchema = new Schema({
     name: {
@@ -18,5 +23,5 @@ CategorySchema.virtual("url").get(function () {
 CategorySchema.plugin(mongooseLeanVirtuals);
 
 // Export model
-const Category = mongoose.model("Category", CategorySchema);
+const Category = mongoose.model<CategoryInterface>("Category", CategorySchema);
 export default Category;
