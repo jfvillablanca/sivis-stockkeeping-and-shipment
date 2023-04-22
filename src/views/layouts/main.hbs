@@ -10,6 +10,15 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
   </head>
   <body>
-    {{{ body }}}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-2">
+          {{> sidebar}}
+        </div>
+        <div class="col-sm-10">
+          {{{ body }}}
+        </div>
+      </div>
+    </div>
   </body>
 </html>

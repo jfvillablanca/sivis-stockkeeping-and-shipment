@@ -13,8 +13,10 @@ export const index = asyncHandler(async (req, res, next) => {
             Customer.countDocuments({}).exec(),
         ]);
 
-    res.render("main", { 
-        layout: "index",
+    res.render("homepage", { 
+        layout: "main",
+        title: "Sivis Stockpiling and Shipment System",
+        header: "Welcome to Sivis Stockpiling and Shipment System",
         numMagicItems,
         numCategories,
         numOrderInstances,
