@@ -6,7 +6,6 @@ const Schema = mongoose.Schema;
 const CategorySchema = new Schema({
     name: {
         type: String,
-        enum: ["Weapon", "Armor", "Potion", "Scroll", "Wondrous Item"],
         required: true,
     },
 });
