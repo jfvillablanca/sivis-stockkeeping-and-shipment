@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongooseLeanVirtuals from "mongoose-lean-virtuals";
 
 const Schema = mongoose.Schema;
 
@@ -14,6 +15,8 @@ const CategorySchema = new Schema({
 CategorySchema.virtual("url").get(function () {
     return `/category/${this._id}`;
 });
+
+CategorySchema.plugin(mongooseLeanVirtuals);
 
 // Export model
 const Category = mongoose.model("Category", CategorySchema);
