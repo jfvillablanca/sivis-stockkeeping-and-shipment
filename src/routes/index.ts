@@ -35,11 +35,10 @@ import {
     category_update_get,
     category_update_post,
 } from "../controllers/categoryController";
+import { index } from "../controllers/indexController";
 export const router = express.Router();
 
-router.get("/", function (req, res, next) {
-    res.render("main", { layout: "index" });
-});
+router.get("/", index);
 
 router.get("/order-instances", orderinstance_list);
 
