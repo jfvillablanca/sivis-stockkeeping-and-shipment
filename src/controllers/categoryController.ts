@@ -1,5 +1,7 @@
+import { RequestHandler } from "express";
 import Category from "../models/category";
 import asyncHandler from "express-async-handler";
+import { body, validationResult } from "express-validator";
 
 // Display list of all Categories.
 export const category_list = asyncHandler(async (req, res, next) => {
@@ -32,13 +34,47 @@ export const category_detail = asyncHandler(async (req, res, next) => {
 
 // Display Category create form on GET.
 export const category_create_get = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: Category create GET");
+    res.render("category_form", {
+        layout: "main",
+        title: "Create new category",
+        header: "Create new category",
+    });
 });
 
 // Handle Category create on POST.
-export const category_create_post = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: Category create POST");
-});
+export const category_create_post: RequestHandler[] = [
+    body("name", "Category name must contain at least 3 characters")
+        .trim()
+        .isLength({ min: 3 })
+        .escape(),
+
+    asyncHandler(async (req, res, next) => {
+        const errors = validationResult(req);
+        const category = new Category({ name: req.body.name });
+
+        if (!errors.isEmpty()) {
+            res.render("category_form", {
+                layout: "main",
+                title: "Create new category",
+                header: "Create new category",
+                errors: errors.array(),
+            });
+            return;
+        } else {
+            const categoryExists = await Category.findOne({
+                name: req.body.name,
+            })
+                .lean({ virtuals: true })
+                .exec();
+            if (categoryExists) {
+                res.redirect(categoryExists.url);
+            } else {
+                await category.save();
+                res.redirect(category.url);
+            }
+        }
+    }),
+];
 
 // Display Category delete form on GET.
 export const category_delete_get = asyncHandler(async (req, res, next) => {
