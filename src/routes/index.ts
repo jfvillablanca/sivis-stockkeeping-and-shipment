@@ -31,6 +31,7 @@ import {
     category_create_post,
     category_delete_get,
     category_delete_post,
+    category_detail,
     category_list,
     category_update_get,
     category_update_post,
@@ -90,6 +91,8 @@ router.get("/categories", category_list);
 router.get("/category/create", category_create_get);
 
 router.post("/category/create", category_create_post);
+
+router.get("/category/:id", category_detail);
 
 router.get("/category/:id/delete", category_delete_get);
 
