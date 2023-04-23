@@ -1,14 +1,12 @@
 import mongoose, { Document } from "mongoose";
 import mongooseLeanVirtuals from "mongoose-lean-virtuals";
 
-const Schema = mongoose.Schema;
-
 interface CategoryInterface extends Document {
     name: string;
     url: string;
 }
 
-const CategorySchema = new Schema({
+const CategorySchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
