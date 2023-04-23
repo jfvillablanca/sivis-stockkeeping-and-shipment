@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import Category from "../models/category";
 import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
+import MagicItem from "../models/magicitem";
 
 // Display list of all Categories.
 export const category_list = asyncHandler(async (req, res, next) => {
@@ -78,12 +79,43 @@ export const category_create_post: RequestHandler[] = [
 
 // Display Category delete form on GET.
 export const category_delete_get = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: Category delete GET");
+    const [category, allMagicItemsByCategory] = await Promise.all([
+        Category.findById(req.params.id).lean({ virtuals: true }).exec(),
+        MagicItem.find({ category: req.params.id }, "item_name description")
+            .lean({ virtuals: true })
+            .exec(),
+    ]);
+
+    res.render("category_delete", {
+        layout: "main",
+        title: `Delete category`,
+        header: "Delete",
+        category,
+        category_magicitems: allMagicItemsByCategory,
+    });
 });
 
 // Handle Category delete on POST.
 export const category_delete_post = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: Category delete POST");
+    const [category, allMagicItemsByCategory] = await Promise.all([
+        Category.findById(req.params.id).lean({ virtuals: true }).exec(),
+        MagicItem.find({ category: req.params.id }, "item_name description")
+            .lean({ virtuals: true })
+            .exec(),
+    ]);
+
+    if (allMagicItemsByCategory.length > 0) {
+        res.render("category_delete", {
+            layout: "main",
+            title: `Delete category`,
+            header: "Delete",
+            category,
+            category_magicitems: allMagicItemsByCategory,
+        });
+    } else {
+        await Category.findByIdAndRemove(req.body.categoryid);
+        res.redirect("/categories");
+    }
 });
 
 // Display Category update form on GET.

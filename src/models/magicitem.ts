@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongooseLeanVirtuals from "mongoose-lean-virtuals";
 
 const Schema = mongoose.Schema;
 
@@ -18,6 +19,8 @@ const MagicItemSchema = new Schema({
 MagicItemSchema.virtual("url").get(function () {
     return `/magic-item/${this._id}`;
 });
+
+MagicItemSchema.plugin(mongooseLeanVirtuals);
 
 // Export model
 const MagicItem = mongoose.model("MagicItem", MagicItemSchema);

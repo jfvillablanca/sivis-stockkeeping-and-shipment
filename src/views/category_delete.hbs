@@ -1,0 +1,27 @@
+<h1>{{header}}: {{category.name}}</h1>
+
+{{#if category_magicitems.length}}
+  <p><strong>Delete the following magic items before attempting to delete this category.</strong></p>
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Magic Items</h4>
+
+    <dl>
+      {{#each category_magicitems as |magicitem| }}
+        <dt><a href="{{magicitem.url}}">{{magicitem.item_name}}</a></dt>
+        <dd>{{magicitem.description}}</dd>
+      {{/each}}
+    </dl>
+  </div>
+
+{{else}}
+  <p>Do you really want to delete this Category?</p>
+  
+  <form method="POST" action="">
+    <div class="form-group">
+      <input id="categoryid" class="form-control" type="hidden" name="categoryid" required="true" value="{{category._id}}">
+    </div>
+    
+    <button class="btn btn-primary" type="submit">Delete</button>
+  </form>
+{{/if}}
