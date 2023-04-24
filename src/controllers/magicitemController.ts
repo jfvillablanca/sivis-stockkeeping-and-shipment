@@ -1,5 +1,5 @@
 import Category from "../models/category";
-import MagicItem from "../models/magicitem";
+import MagicItem, { MagicItemSchema } from "../models/magicitem";
 import asyncHandler from "express-async-handler";
 
 // Display list of all Magic Items.
@@ -44,7 +44,18 @@ export const magicitem_detail = asyncHandler(async (req, res, next) => {
 
 // Display magic item create form on GET.
 export const magicitem_create_get = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: magicitem create GET");
+    const rarityEnumValues = MagicItemSchema.path("rarity").options.enum;
+    const categoryEnumValues = (
+        await Category.find().sort({ name: 1 }).exec()
+    ).map((category) => category.name);
+
+    res.render("magicitem_form", {
+        layout: "main",
+        title: "Create new magic item",
+        header: "Create new magic item",
+        rarityEnumValues: rarityEnumValues,
+        categoryEnumValues: categoryEnumValues,
+    });
 });
 
 // Handle magic item create on POST.

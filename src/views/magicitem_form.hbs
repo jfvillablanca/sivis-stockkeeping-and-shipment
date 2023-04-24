@@ -1,0 +1,83 @@
+<h1>{{ header }} {{ magicitem.item_name }}</h1>
+
+<form method="POST" action="">
+  <div class="form-group">
+    <label for="name">Magic Item's Name:</label>
+    <input 
+        id="name" 
+        class="form-control" 
+        type="text" 
+        placeholder="{{#if magicitem}}{{magicitem.item_name}}{{else}}Sword of Kas{{/if}}" 
+        name="name" 
+        value="{{#if magicitem}}{{magicitem.item_name}}{{/if}}"
+        required="true"
+    />
+
+    <label for="name">Description:</label>
+    <textarea
+        id="description"
+        class="form-control"
+        placeholder="{{#if magicitem}}{{magicitem.description}}{{else}}This sword curses its wielder with unknowable knowledge{{/if}}" 
+        name="description"
+        rows="4"
+        required="true"
+        style="resize: none"
+    ></textarea>
+
+    <label for="category">Category:</label>
+    <select 
+        id="category" 
+        class="form-control" 
+        name="category" 
+        required="true"
+    >
+      {{#each categoryEnumValues}}
+        <option value="{{ this }}">{{ this }}</option>
+      {{/each}}
+    </select>
+
+    <label for="price">Price:</label>
+    <input 
+        id="price" 
+        class="form-control" 
+        type="text" 
+        placeholder="{{#if magicitem}}{{magicitem.price}}{{else}}500000{{/if}}" 
+        name="price" 
+        value="{{#if magicitem}}{{magicitem.price}}{{/if}}"
+        required="true"
+    />
+
+    <label for="stock">Stock:</label>
+    <input 
+        id="stock" 
+        class="form-control" 
+        type="text" 
+        placeholder="{{#if magicitem}}{{magicitem.stock}}{{else}}1{{/if}}" 
+        name="stock" 
+        value="{{#if magicitem}}{{magicitem.stock}}{{/if}}"
+        required="true"
+    />
+
+    <label for="rarity">Rarity:</label>
+    <select 
+        id="rarity" 
+        class="form-control" 
+        name="rarity" 
+        required="true"
+    >
+      {{#each rarityEnumValues}}
+        <option value="{{ this }}">{{ this }}</option>
+      {{/each}}
+    </select>
+
+  </div>
+  <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+
+{{#if errors}}
+  <ul>
+    {{#each errors}}
+      <li>{{msg}}</li>
+    {{/each}}
+  </ul>
+{{/if}}
