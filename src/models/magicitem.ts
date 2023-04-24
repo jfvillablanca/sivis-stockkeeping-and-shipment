@@ -1,9 +1,17 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import mongooseLeanVirtuals from "mongoose-lean-virtuals";
 
-const Schema = mongoose.Schema;
+interface MagicItemInterface extends Document {
+    item_name: string;
+    description: string;
+    category: Schema.Types.ObjectId;
+    price: number;
+    stock: number;
+    rarity: "Common" | "Uncommon" | "Rare" | "Very rare" | "Legendary";
+    url: string;
+}
 
-const MagicItemSchema = new Schema({
+export const MagicItemSchema = new mongoose.Schema({
     item_name: { type: String, required: true, maxLength: 100 },
     description: { type: String, required: true, maxLength: 1000 },
     category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
@@ -23,5 +31,8 @@ MagicItemSchema.virtual("url").get(function () {
 MagicItemSchema.plugin(mongooseLeanVirtuals);
 
 // Export model
-const MagicItem = mongoose.model("MagicItem", MagicItemSchema);
+const MagicItem = mongoose.model<MagicItemInterface>(
+    "MagicItem",
+    MagicItemSchema
+);
 export default MagicItem;
