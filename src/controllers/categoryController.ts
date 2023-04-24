@@ -3,6 +3,7 @@ import Category from "../models/category";
 import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
 import MagicItem from "../models/magicitem";
+import createHttpError from "http-errors";
 
 // Display list of all Categories.
 export const category_list = asyncHandler(async (req, res, next) => {
@@ -120,10 +121,59 @@ export const category_delete_post = asyncHandler(async (req, res, next) => {
 
 // Display Category update form on GET.
 export const category_update_get = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: Category update GET");
+    const category = await Category.findById(req.params.id).lean().exec();
+
+    if (category === null)
+        return next(createHttpError(404, "Category not found"));
+
+    res.render("category_form", {
+        layout: "main",
+        title: "Update category",
+        header: "Update: ",
+        category,
+    });
 });
 
 // Handle Category update on POST.
-export const category_update_post = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: Category update POST");
-});
+export const category_update_post: RequestHandler[] = [
+    body("name", "Category name must contain at least 3 characters")
+        .trim()
+        .isLength({ min: 3 })
+        .escape(),
+
+    asyncHandler(async (req, res, next) => {
+        const errors = validationResult(req);
+        const category = new Category({
+            name: req.body.name,
+            _id: req.params.id,
+        });
+
+        if (!errors.isEmpty()) {
+            res.render("category_form", {
+                layout: "main",
+                title: "Update category",
+                header: "Update category",
+                category,
+                errors: errors.array(),
+            });
+            return;
+        } else {
+            const validCategory = await Category.findByIdAndUpdate(
+                req.params.id,
+                category,
+                {}
+            )
+                .lean({ virtuals: true })
+                .exec();
+            if (validCategory !== null) {
+                res.redirect(validCategory.url);
+            } else {
+                next(
+                    createHttpError(500, "Internal server error", {
+                        reason: "Database connection failed",
+                    })
+                );
+            }
+        }
+    }),
+];

@@ -1,9 +1,15 @@
-<h1>{{ header }}</h1>
+<h1>{{ header }} {{ category.name }}</h1>
 
 <form method="POST" action="">
   <div class="form-group">
     <label for="name">Category:</label>
-    <input id="name" class="form-control" type="text" placeholder="Rings, Amulets, etc." name="name" value="{{#if category}}{{category.name}}{{/if}}">
+    <input 
+        id="name" 
+        class="form-control" 
+        type="text" 
+        placeholder="{{#if category}}{{category.name}}{{else}}Rings, Amulets, etc.{{/if}}" 
+        name="name" 
+        value="{{#if category}}{{category.name}}{{/if}}">
   </div>
   <button class="btn btn-primary" type="submit">Submit</button>
 </form>
