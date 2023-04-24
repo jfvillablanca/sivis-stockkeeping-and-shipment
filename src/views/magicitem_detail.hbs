@@ -1,0 +1,12 @@
+<h1>{{ header }}</h1>
+<div style="margin-left:20px;margin-top:20px">
+  <h4>{{ magicitem.name }}</h4>
+  <p>Description: {{ magicitem.description }}</p>
+  <p>Category: <a href="{{magicitem.category.url}}">{{ magicitem.category.name }}</a></p>
+  <p>Price: {{ magicitem.price }}</p>
+  <p>Stock: {{ magicitem.stock }}</p>
+  <p>Rarity: {{ magicitem.rarity }}</p>
+  <hr />
+  <p><a href="{{ magicitem.url }}/delete">Delete magic item</a></p>
+  <p><a href="{{ magicitem.url }}/update">Update magic item</a></p>
+</div>

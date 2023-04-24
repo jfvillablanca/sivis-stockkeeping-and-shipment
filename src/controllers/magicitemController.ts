@@ -1,3 +1,4 @@
+import Category from "../models/category";
 import MagicItem from "../models/magicitem";
 import asyncHandler from "express-async-handler";
 
@@ -23,7 +24,22 @@ export const magicitem_list = asyncHandler(async (req, res, next) => {
 
 // Display detail page for a specific magic item.
 export const magicitem_detail = asyncHandler(async (req, res, next) => {
-    res.send(`NOT IMPLEMENTED: magicitem detail: ${req.params.id}`);
+    const magicitem = await MagicItem.findById(req.params.id)
+        .lean({ virtuals: true })
+        .exec();
+
+    const categoryOfMagicItem = magicitem?.category
+        ? await Category.findById(magicitem.category)
+              .lean({ virtuals: true })
+              .exec()
+        : {};
+
+    res.render("magicitem_detail", {
+        layout: "main",
+        title: "Magic Item Detail",
+        header: "Magic Item Detail",
+        magicitem: { ...magicitem, category: categoryOfMagicItem },
+    });
 });
 
 // Display magic item create form on GET.

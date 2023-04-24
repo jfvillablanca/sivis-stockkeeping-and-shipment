@@ -13,6 +13,7 @@ import {
     magicitem_create_post,
     magicitem_delete_get,
     magicitem_delete_post,
+    magicitem_detail,
     magicitem_list,
     magicitem_update_get,
     magicitem_update_post,
@@ -61,6 +62,8 @@ router.get("/magic-items", magicitem_list);
 router.get("/magic-item/create", magicitem_create_get);
 
 router.post("/magic-item/create", magicitem_create_post);
+
+router.get("/magic-item/:id", magicitem_detail);
 
 router.get("/magic-item/:id/delete", magicitem_delete_get);
 
