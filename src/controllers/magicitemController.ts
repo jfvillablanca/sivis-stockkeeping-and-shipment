@@ -3,7 +3,22 @@ import asyncHandler from "express-async-handler";
 
 // Display list of all Magic Items.
 export const magicitem_list = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: magicitem list");
+    const allMagicItems = await MagicItem.find()
+        .lean({ virtuals: true })
+        .sort({ item_name: 1 })
+        .exec();
+
+    res.render("magicitem_list", {
+        layout: "main",
+        title: "Magic Item List",
+        header: "Magic Item List",
+        list: allMagicItems.map((item) => {
+            return {
+                ...item,
+                name: item.item_name,
+            };
+        }),
+    });
 });
 
 // Display detail page for a specific magic item.
