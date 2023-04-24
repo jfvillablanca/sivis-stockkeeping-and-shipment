@@ -2,14 +2,16 @@
 
 <form method="POST" action="">
   <div class="form-group">
-    <label for="name">Category:</label>
+    <label for="name">Category Name:</label>
     <input 
         id="name" 
         class="form-control" 
         type="text" 
         placeholder="{{#if category}}{{category.name}}{{else}}Rings, Amulets, etc.{{/if}}" 
         name="name" 
-        value="{{#if category}}{{category.name}}{{/if}}">
+        value="{{#if category}}{{category.name}}{{/if}}"
+        required="true"
+    />
   </div>
   <button class="btn btn-primary" type="submit">Submit</button>
 </form>
