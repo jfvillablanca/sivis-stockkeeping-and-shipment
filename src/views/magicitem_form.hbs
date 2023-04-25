@@ -17,12 +17,12 @@
     <textarea
         id="description"
         class="form-control"
-        placeholder="{{#if magicitem}}{{magicitem.description}}{{else}}This sword curses its wielder with unknowable knowledge{{/if}}" 
+        placeholder="This sword curses its wielder with unknowable knowledge" 
         name="description"
         rows="4"
         required="true"
         style="resize: none"
-    ></textarea>
+    >{{#if magicitem}}{{magicitem.description}}{{/if}}</textarea>
 
     <label for="category">Category:</label>
     <select 
