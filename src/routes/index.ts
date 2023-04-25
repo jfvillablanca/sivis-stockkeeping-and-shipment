@@ -4,6 +4,7 @@ import {
     orderinstance_create_post,
     orderinstance_delete_get,
     orderinstance_delete_post,
+    orderinstance_detail,
     orderinstance_list,
     orderinstance_update_get,
     orderinstance_update_post,
@@ -48,6 +49,8 @@ router.get("/order-instance/create", orderinstance_create_get);
 
 router.post("/order-instance/create", orderinstance_create_post);
 
+router.get("/order-instance/:id", orderinstance_detail);
+
 router.get("/order-instance/:id/delete", orderinstance_delete_get);
 
 router.post("/order-instance/:id/delete", orderinstance_delete_post);
@@ -55,7 +58,6 @@ router.post("/order-instance/:id/delete", orderinstance_delete_post);
 router.get("/order-instance/:id/update", orderinstance_update_get);
 
 router.post("/order-instance/:id/update", orderinstance_update_post);
-
 
 router.get("/magic-items", magicitem_list);
 
@@ -73,7 +75,6 @@ router.get("/magic-item/:id/update", magicitem_update_get);
 
 router.post("/magic-item/:id/update", magicitem_update_post);
 
-
 router.get("/customers", customer_list);
 
 router.get("/customer/create", customer_create_get);
@@ -87,7 +88,6 @@ router.post("/customer/:id/delete", customer_delete_post);
 router.get("/customer/:id/update", customer_update_get);
 
 router.post("/customer/:id/update", customer_update_post);
-
 
 router.get("/categories", category_list);
 

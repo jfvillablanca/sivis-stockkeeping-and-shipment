@@ -18,7 +18,17 @@ export const orderinstance_list = asyncHandler(async (req, res, next) => {
 
 // Display detail page for a specific Order Instance.
 export const orderinstance_detail = asyncHandler(async (req, res, next) => {
-    res.send(`NOT IMPLEMENTED: Order Instance detail: ${req.params.id}`);
+    const orderinstance = await OrderInstance.findById(req.params.id)
+        .populate("orderArray.magic_item")
+        .lean({ virtuals: true })
+        .exec();
+
+    res.render("orderinstance_detail", {
+        layout: "main",
+        title: "Order Instance Detail",
+        header: "Order Instance Detail",
+        orderinstance,
+    });
 });
 
 // Display Order Instance create form on GET.
