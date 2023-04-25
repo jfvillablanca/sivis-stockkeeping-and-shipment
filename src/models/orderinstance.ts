@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongooseLeanVirtuals from "mongoose-lean-virtuals";
 
 const SingleOrderSchema = new mongoose.Schema({
     magic_item: {
@@ -16,6 +17,8 @@ const OrderInstanceSchema = new mongoose.Schema({
 OrderInstanceSchema.virtual("url").get(function () {
     return `/order-instance/${this._id}`;
 });
+
+OrderInstanceSchema.plugin(mongooseLeanVirtuals);
 
 // Export model
 const OrderInstance = mongoose.model("OrderInstance", OrderInstanceSchema);
