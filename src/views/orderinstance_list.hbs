@@ -1,0 +1,14 @@
+<h1>{{ header }}</h1>
+<ul>
+    {{#each list as |orderinstance| }}
+    <li>
+      <p><a href="{{orderinstance.url}}">Order No: {{orderinstance._id}}</a></p>
+      <ul>
+        {{#each orderinstance.orderArray as |line_item| }}
+          <li><p>{{line_item.order_quantity}} units of <a href="{{line_item.magic_item.url}}">{{line_item.magic_item.item_name}}</a></p></li>
+        {{/each}}
+      </ul>
+      <hr />
+    </li>
+    {{/each}}
+</ul>

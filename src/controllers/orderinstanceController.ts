@@ -3,7 +3,17 @@ import asyncHandler from "express-async-handler";
 
 // Display list of all Order Instances.
 export const orderinstance_list = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: Order Instance list");
+    const allOrderInstances = await OrderInstance.find()
+        .populate("orderArray.magic_item")
+        .lean({ virtuals: true })
+        .exec();
+
+    res.render("orderinstance_list", {
+        layout: "main",
+        title: "Order Instance List",
+        header: "Order Instance List",
+        list: allOrderInstances,
+    });
 });
 
 // Display detail page for a specific Order Instance.
