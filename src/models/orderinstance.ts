@@ -1,17 +1,15 @@
 import mongoose from "mongoose";
 
-const Schema = mongoose.Schema;
-
-const SingleOrderSchema = new Schema({
+const SingleOrderSchema = new mongoose.Schema({
     magic_item: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "MagicItem",
         required: true,
     },
     order_quantity: { type: Number, required: true },
 });
 
-const OrderInstanceSchema = new Schema({
+const OrderInstanceSchema = new mongoose.Schema({
     orderArray: [SingleOrderSchema],
 });
 
