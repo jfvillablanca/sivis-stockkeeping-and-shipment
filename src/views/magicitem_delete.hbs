@@ -1,0 +1,33 @@
+<h1>{{header}}: {{magicitem.item_name}}</h1>
+
+{{#if magicitems_orderinstances.length}}
+  <p><strong>Delete the following order instances before attempting to delete this magic item.</strong></p>
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Order Instances</h4>
+    <hr />
+
+    <dl>
+      {{#each magicitems_orderinstances as |orderinstance| }}
+        <dt><a href="{{orderinstance.url}}">Order No: {{orderinstance._id}}</a></dt>
+        <ul>
+          {{#each orderinstance.orderArray as |line_item| }}
+            <li><p>{{line_item.order_quantity}} units of {{line_item.magic_item.item_name}}</p></li>
+          {{/each}}
+        </ul>
+        <hr />
+      {{/each}}
+    </dl>
+  </div>
+
+{{else}}
+  <p>Do you really want to delete this Magic Item?</p>
+  
+  <form method="POST" action="">
+    <div class="form-group">
+      <input id="magicitemid" class="form-control" type="hidden" name="magicitemid" required="true" value="{{magicitem._id}}">
+    </div>
+    
+    <button class="btn btn-primary" type="submit">Delete</button>
+  </form>
+{{/if}}

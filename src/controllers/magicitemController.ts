@@ -3,6 +3,7 @@ import Category from "../models/category";
 import MagicItem, { MagicItemSchema } from "../models/magicitem";
 import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
+import OrderInstance from "../models/orderinstance";
 
 // Display list of all Magic Items.
 export const magicitem_list = asyncHandler(async (req, res, next) => {
@@ -144,7 +145,21 @@ export const magicitem_create_post: RequestHandler[] = [
 
 // Display magic item delete form on GET.
 export const magicitem_delete_get = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: magicitem delete GET");
+    const [magicitem, allOrderInstancesByMagicItem] = await Promise.all([
+        MagicItem.findById(req.params.id).lean({ virtuals: true }).exec(),
+        OrderInstance.find({ "orderArray.magic_item": req.params.id })
+            .populate("orderArray.magic_item")
+            .lean({ virtuals: true })
+            .exec(),
+    ]);
+
+    res.render("magicitem_delete", {
+        layout: "main",
+        title: `Delete magic item`,
+        header: "Delete",
+        magicitem: magicitem,
+        magicitems_orderinstances: allOrderInstancesByMagicItem,
+    });
 });
 
 // Handle magic item delete on POST.
