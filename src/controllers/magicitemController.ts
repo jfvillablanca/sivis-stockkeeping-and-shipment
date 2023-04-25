@@ -164,7 +164,26 @@ export const magicitem_delete_get = asyncHandler(async (req, res, next) => {
 
 // Handle magic item delete on POST.
 export const magicitem_delete_post = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: magicitem delete POST");
+    const [magicitem, allOrderInstancesByMagicItem] = await Promise.all([
+        MagicItem.findById(req.params.id).lean({ virtuals: true }).exec(),
+        OrderInstance.find({ "orderArray.magic_item": req.params.id })
+            .populate("orderArray.magic_item")
+            .lean({ virtuals: true })
+            .exec(),
+    ]);
+
+    if (allOrderInstancesByMagicItem.length > 0) {
+        res.render("magicitem_delete", {
+            layout: "main",
+            title: `Delete magic item`,
+            header: "Delete",
+            magicitem: magicitem,
+            magicitems_orderinstances: allOrderInstancesByMagicItem,
+        });
+    } else {
+        await MagicItem.findByIdAndRemove(req.body.magicitemid);
+        res.redirect("/magic-items");
+    }
 });
 
 // Display magic item update form on GET.
