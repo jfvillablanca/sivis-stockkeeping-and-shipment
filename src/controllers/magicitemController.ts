@@ -1,6 +1,8 @@
+import { RequestHandler } from "express";
 import Category from "../models/category";
 import MagicItem, { MagicItemSchema } from "../models/magicitem";
 import asyncHandler from "express-async-handler";
+import { body, validationResult } from "express-validator";
 
 // Display list of all Magic Items.
 export const magicitem_list = asyncHandler(async (req, res, next) => {
@@ -59,9 +61,86 @@ export const magicitem_create_get = asyncHandler(async (req, res, next) => {
 });
 
 // Handle magic item create on POST.
-export const magicitem_create_post = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: magicitem create POST");
-});
+export const magicitem_create_post: RequestHandler[] = [
+    body("name", "The magic item name must contain at least 3 characters")
+        .trim()
+        .isLength({ min: 3 })
+        .escape(),
+    body("description", "The description must contain at least 3 characters")
+        .trim()
+        .isLength({ min: 3 })
+        .escape(),
+    body("category.*").escape(),
+    body("price", "The price must be a nonnegative integer")
+        .trim()
+        .isInt({ min: 0, allow_leading_zeroes: false })
+        .escape(),
+    body("stock", "The stock must be a nonnegative integer")
+        .trim()
+        .isInt({ min: 0, allow_leading_zeroes: false })
+        .escape(),
+    body("rarity.*").escape(),
+    asyncHandler(async (req, res, next) => {
+        const reqMagicItem = {
+            item_name: req.body.name,
+            description: req.body.description,
+            category: await Category.findOne({
+                name: req.body.category,
+            }).exec(),
+            price: req.body.price,
+            stock: req.body.stock,
+            rarity: req.body.rarity,
+        };
+
+        const errors = validationResult(req);
+        const magicitem = new MagicItem({
+            item_name: reqMagicItem.item_name,
+            description: reqMagicItem.description,
+            category: reqMagicItem.category,
+            price: reqMagicItem.price,
+            stock: reqMagicItem.stock,
+            rarity: reqMagicItem.rarity,
+        });
+
+        const rarityEnumValues = MagicItemSchema.path("rarity").options.enum;
+        const categoryEnumValues = (
+            await Category.find().sort({ name: 1 }).exec()
+        ).map((category) => category.name);
+
+        if (!errors.isEmpty()) {
+            res.render("magicitem_form", {
+                layout: "main",
+                title: "Create new magic item",
+                header: "Create new magic item",
+                rarityEnumValues: rarityEnumValues,
+                categoryEnumValues: categoryEnumValues,
+                magicitem: {
+                    ...reqMagicItem,
+                    category: reqMagicItem.category?.name,
+                },
+                errors: errors.array(),
+            });
+            return;
+        } else {
+            const magicItemExists = await MagicItem.findOne({
+                item_name: reqMagicItem.item_name,
+                description: reqMagicItem.description,
+                category: reqMagicItem.category,
+                price: reqMagicItem.price,
+                stock: reqMagicItem.stock,
+                rarity: reqMagicItem.rarity,
+            })
+                .lean({ virtuals: true })
+                .exec();
+            if (magicItemExists) {
+                res.redirect(magicItemExists.url);
+            } else {
+                await magicitem.save();
+                res.redirect(magicitem.url);
+            }
+        }
+    }),
+];
 
 // Display magic item delete form on GET.
 export const magicitem_delete_get = asyncHandler(async (req, res, next) => {
