@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 import mongooseLeanVirtuals from "mongoose-lean-virtuals";
 
 const OrderInstanceSchema = new mongoose.Schema({
@@ -20,6 +20,16 @@ OrderInstanceSchema.virtual("url").get(function () {
 
 OrderInstanceSchema.plugin(mongooseLeanVirtuals);
 
+interface OrderInstanceInterface extends Document {
+    orderArray: [
+        { magic_item: mongoose.Schema.Types.ObjectId; order_quantity: number }
+    ];
+    url: string;
+}
+
 // Export model
-const OrderInstance = mongoose.model("OrderInstance", OrderInstanceSchema);
+const OrderInstance = mongoose.model<OrderInstanceInterface>(
+    "OrderInstance",
+    OrderInstanceSchema
+);
 export default OrderInstance;
