@@ -91,13 +91,26 @@ export const orderinstance_create_post: RequestHandler[] = [
 
 // Display Order Instance delete form on GET.
 export const orderinstance_delete_get = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: Order Instance delete GET");
+    const orderinstance = await OrderInstance.findById(req.params.id)
+        .populate("orderArray.magic_item")
+        .lean({ virtuals: true })
+        .exec();
+
+    res.render("orderinstance_delete", {
+        layout: "main",
+        title: `Delete Order Instance`,
+        header: "Delete Order No",
+        orderinstance,
+    });
 });
 
 // Handle Order Instance delete on POST.
-export const orderinstance_delete_post = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: Order Instance delete POST");
-});
+export const orderinstance_delete_post = asyncHandler(
+    async (req, res, next) => {
+        await OrderInstance.findByIdAndRemove(req.body.orderinstanceid);
+        res.redirect("/order-instances");
+    }
+);
 
 // Display Order Instance update form on GET.
 export const orderinstance_update_get = asyncHandler(async (req, res, next) => {
